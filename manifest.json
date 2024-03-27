@@ -1,0 +1,25 @@
+{
+    "name": "xtwit-diary",
+    "version": "1.0",
+    "description": "X(구 트위터) 팔로잉/팔로워 기록용 크롬 확장 플러그인",
+    "manifest_version": 3,
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://twitter.com/*", "https://x.com/*"],
+            "js": ["contentscript.js"]
+        }
+    ],
+    "permissions": [
+      "storage",
+      "activeTab",
+      "tabs",
+      "scripting"
+    ],  
+    "action": {    
+      "default_icon": "favicon.png",    
+      "default_popup": "popup.html"
+    }
+}

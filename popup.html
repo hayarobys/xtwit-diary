@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>xtwit-diary</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="twitterHandleInputTable">
+        <div style="">input your 𝕏 ID</div>
+        <div style="">
+            @<input type="text" id="twitterHandleInput" placeholder="myid"/>
+            <button id="twitterHandleSaveButton">save</button>
+        </div>
+    </div>
+
+    <div id="twitterHandleInfoTable" name="info" style="display: none;">
+        <div style="">
+            @<span id="twitterHandleSpan"></span>
+            <button id="twitterHandleResetButton">ID reset</button>
+        </div>
+    </div>
+    <div name="info" class="info">
+        <button id="startButton">기록 시작!</button>
+        <button id="stopButton" style="display: none;">기록 끝!</button>
+        <div id="log"></div>
+        <div id="saveCountDiv" class="saveCountDiv" style="display: none;">
+            <span id="saveCount">0</span> <span id="tabName"></span>
+        </div>
+        <div id="pastSaveDateDiv" class="pastSaveDateDiv" style="display: none;">now</div>
+        <div id="middleArrow" class="middleArrow" style="display: none;"> -> </div>
+        <div id="saveDateDiv" class="saveDateDiv" style="display: none;"></div>
+        <table id="resultTable" class="resultTable" style="display: none;">
+            <thead>
+                <tr>
+                    <td>added</td>
+                    <td>deleted</td>
+                </tr>
+            </thead>
+            <tbody id="resultTableTbody">
+
+            </tbody>
+        </table>
+    </div>
+    <script src="popup.js"></script> <!-- popup.js 연결 -->
+  </body>
+</html>

@@ -1,0 +1,90 @@
+body {
+    width: 310px;
+    height: 100px;
+    background-color: #15202B;
+    color: #E9EBEC;
+}
+
+div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+button {
+  border-color: rgb(83, 100, 113);
+  background-color: rgb(83, 100, 113); 
+  color: #E9EBEC;
+  border: none;
+  padding: 3px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 11px;
+  border-radius: 12px; /* 버튼 모서리를 둥글게 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  transition: background-color 0.3s; /* 호버 효과 */
+}
+
+button:hover {
+  background-color: rgb(66, 80, 91); /* 호버 시 색상 변경 */
+}
+
+button:active {
+  background-color: rgb(43, 53, 60); /* 클릭 시 색상 변경 */
+}
+
+
+.green {
+  color: #00BA7C;
+}
+
+.red {
+  color: #F91880;
+}
+
+thead td {
+  font-weight: bold;
+}
+
+td {
+  border: 1px solid #38444D;
+  min-width: 144px;
+}
+
+.info {
+  width: 300px;
+}
+
+.saveCountDiv {
+  width: 100px;
+}
+
+.pastSaveDateDiv {
+  width:140px;
+  float: left;
+  text-align: left;
+}
+.middleArrow {
+  width:20px;
+  float: left;
+  text-align: center;
+}
+.saveDateDiv {
+  width:140px;
+  float: right;
+  text-align: right;
+}
+
+#twitterHandleInput {
+  background-color: #253341; /* 입력 필드 배경색 */
+  color: #E9EBEC; /* 입력 텍스트 색상 */
+  border: 1px solid #38444D; /* 테두리 색상 */
+  padding: 2px 5px; /* 내부 패딩 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  outline: none; /* 포커스 시 아웃라인 제거 */
+  transition: border-color 0.3s; /* 테두리 색상 변경 애니메이션 */
+}
+
+#twitterHandleInput:focus {
+  border-color: #1DA1F2; /* 포커스 시 테두리 색상 변경 */
+}

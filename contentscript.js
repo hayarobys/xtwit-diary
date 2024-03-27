@@ -2,11 +2,23 @@
 let tabName = '';
 let tempSet = new Set();
 let friendToSetScrollListener = throttle(function() {
-    document.querySelectorAll('[data-testid="UserCell"] div.r-1iusvr4 a[tabindex="-1"]').forEach(
-        p => {
+    document.querySelectorAll('[data-testid="UserCell"] div.r-1iusvr4 a[tabindex="-1"]').forEach(p => {
+        // 부모 노드 중에 'aside' 태그가 있는지 확인합니다.
+        let isInsideAside = false;
+        let parent = p.parentElement;
+        while (parent) {
+            if (parent.tagName === 'ASIDE') {
+                isInsideAside = true;
+                break;
+            }
+            parent = parent.parentElement;
+        }
+    
+        // 'aside' 태그 내부에 있지 않은 요소만 tempSet에 추가합니다.
+        if (!isInsideAside) {
             tempSet.add(p.getAttribute('href'));
         }
-    );
+    });
 }, 50); // ms
 
 function throttle(func, limit){

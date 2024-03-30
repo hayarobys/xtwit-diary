@@ -11,7 +11,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     }
 });
 
-let twitterHandleSpan = document.getElementById('twitterHandleSpan');
+let $twitterHandleSpan = document.getElementById('twitterHandleSpan');
 let $resetButton = document.getElementById('twitterHandleResetButton');
 let $startButton = document.getElementById('startButton');
 let $stopButton = document.getElementById('stopButton');
@@ -21,7 +21,7 @@ let $resultTableTbody = document.getElementById('resultTableTbody');
 let $saveCountDiv = document.getElementById('saveCountDiv');
 let $pastSaveDateDiv = document.getElementById('pastSaveDateDiv');
 let $middleArrow = document.getElementById('middleArrow');
-let $saveDateDiv = document.getElementById('saveDateDiv');
+let $currentSaveDateDiv = document.getElementById('currentSaveDateDiv');
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
     chrome.storage.local.get('twitterHandle', function(data){
         if(data.twitterHandle){
             document.getElementById('twitterHandleInput').value = data.twitterHandle;
-            twitterHandleSpan.innerText = data.twitterHandle;
+            $twitterHandleSpan.innerText = data.twitterHandle;
             showTwitterHandleInfoTable();
         }
     });
@@ -61,11 +61,11 @@ document.addEventListener('DOMContentLoaded', function(){
         $saveCountDiv.style.display = 'none';
         $pastSaveDateDiv.style.display = 'none';
         $middleArrow.style.display = 'none';
-        $saveDateDiv.style.display = 'none';
+        $currentSaveDateDiv.style.display = 'none';
         $resultTable.style.display = 'none';
         $resultTableTbody.innerHTML = '';
         document.getElementById('pastSaveDateDiv').innerText = '';
-        document.getElementById('saveDateDiv').innerText = '';
+        document.getElementById('currentSaveDateDiv').innerText = '';
 
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, {
@@ -84,14 +84,14 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function stopFunc(){
-    $resetButton.style.display = 'block';
+    $resetButton.style.display = 'inline';
     $stopButton.style.display = 'none';
     $startButton.style.display = 'block';
     $saveCountDiv.style.display = 'block';
     $logDiv.innerHTML = '';
-    $pastSaveDateDiv.style.display = 'block';
-    $middleArrow.style.display = 'block';
-    $saveDateDiv.style.display = 'block';
+    $pastSaveDateDiv.style.display = 'inline';
+    $middleArrow.style.display = 'inline';
+    $currentSaveDateDiv.style.display = 'inline';
     $resultTable.style.display = 'block';
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, {
@@ -104,14 +104,14 @@ function stopFunc(){
 }
 
 function deniedFunc(){
-    $resetButton.style.display = 'block';
+    $resetButton.style.display = 'inline';
     $stopButton.style.display = 'none';
     $startButton.style.display = 'block';
     $logDiv.innerHTML = '내 팔로잉/팔로워 탭에서만 동작합니다.<br/>이미 위치한 경우 새로고침 후 시도해 주세요.';
     $saveCountDiv.style.display = 'none';
     $pastSaveDateDiv.style.display = 'none';
     $middleArrow.style.display = 'none';
-    $saveDateDiv.style.display = 'none';
+    $currentSaveDateDiv.style.display = 'none';
     $resultTable.style.display = 'none';
 }
 
@@ -119,13 +119,25 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     const {data} = request;
     if (request.action === 'SEND_RESULT') {
         let sortedArr = request.result;
+        let sortedArr2 = [];
+
+        sortedArr.forEach(p => {
+            let lastSpaceIndex = p.lastIndexOf(' ');
+            if (lastSpaceIndex !== -1) {
+                sortedArr2.push({
+                    'displayName': p
+                    , 'twitterHandle': p.substring(lastSpaceIndex + 1)
+                });
+            }
+        });
+
         let historyKey = request.tabName + '-' + twitterHandleSpan.innerText;
         chrome.storage.local.get(historyKey, function(data){
 
-            let saveDate = new Date().toLocaleString();
+            let currentSaveDateDiv = new Date().toLocaleString();
             let currentHistory = {
-                'saveDate' : saveDate
-                , 'sortedArr' : sortedArr
+                'saveDate' : currentSaveDateDiv
+                , 'sortedArr' : sortedArr2
             };
             let historyArr = data[historyKey];
             if(!historyArr){
@@ -140,10 +152,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             document.getElementById('tabName').innerText = request.tabName;
             document.getElementById('saveCount').innerText = sortedArr.length;
             document.getElementById('pastSaveDateDiv').innerText = pastHistory.saveDate;
-            document.getElementById('saveDateDiv').innerText = saveDate;
+            document.getElementById('currentSaveDateDiv').innerText = currentSaveDateDiv;
             let $resultTableTbody = document.getElementById('resultTableTbody');
             
-            let classifyResult = classifyElements(pastHistory.sortedArr, sortedArr);
+            let classifyResult = classifyElements(pastHistory.sortedArr, sortedArr2);
             let addedArr = classifyResult.added;
             let deletedArr = classifyResult.deleted;
 
@@ -151,12 +163,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             for(let i=0; i < maxLength; i++){
                 let $added = document.createElement('td');
                 if(addedArr){
-                    $added.innerText = addedArr.length>i ? addedArr[i] : '';
+                    $added.innerText = addedArr.length>i ? addedArr[i].displayName : '';
                     $added.className = 'green';
                 }
                 let $deleted = document.createElement('td');
                 if(deletedArr){
-                    $deleted.innerText = deletedArr.length>i ? deletedArr[i] : '';
+                    $deleted.innerText = deletedArr.length>i ? deletedArr[i].displayName : '';
                     $deleted.className = 'red';
                 }
 
@@ -178,8 +190,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  * b 배열에 추가된 요소와 a 배열에서 삭제된 요소를 찾는 함수
  */
 function classifyElements(a, b) {
-    const addedElements = b.filter(item => !a.includes(item));
-    const deletedElements = a.filter(item => !b.includes(item));
+    // const addedElements = b.filter(item => !a.includes(item));
+    // const deletedElements = a.filter(item => !b.includes(item));
+    const addedElements = b.filter(itemB => !a.some(itemA => itemA.twitterHandle === itemB.twitterHandle));
+    const deletedElements = a.filter(itemA => !b.some(itemB => itemB.twitterHandle === itemA.twitterHandle));
 
     return {
         added: addedElements,

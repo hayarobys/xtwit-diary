@@ -2,10 +2,10 @@
 let tabName = '';
 let tempSet = new Set();
 let friendToSetScrollListener = throttle(function() {
-    document.querySelectorAll('[data-testid="UserCell"] div.r-1iusvr4 a[tabindex="-1"]').forEach(p => {
-        // 부모 노드 중에 'aside' 태그가 있는지 확인합니다.
+    document.querySelectorAll('[data-testid="UserCell"] div.r-1iusvr4').forEach(userCell => {
+        // 추천탭인 경우 무시
         let isInsideAside = false;
-        let parent = p.parentElement;
+        let parent = userCell.parentElement;
         while (parent) {
             if (parent.tagName === 'ASIDE') {
                 isInsideAside = true;
@@ -13,10 +13,16 @@ let friendToSetScrollListener = throttle(function() {
             }
             parent = parent.parentElement;
         }
-    
-        // 'aside' 태그 내부에 있지 않은 요소만 tempSet에 추가합니다.
         if (!isInsideAside) {
-            tempSet.add(p.getAttribute('href'));
+            // 아이디 추출
+            var userNameLink = userCell.querySelector('a[href^="/"]');
+            var userName = userNameLink ? '@' + userNameLink.getAttribute('href').substring(1) : null;
+
+            // 닉네임 추출
+            var displayNameElement = userCell.querySelector('div[dir="ltr"]');
+            var displayName = displayNameElement ? displayNameElement.textContent.trim() : null;
+
+            tempSet.add(`${displayName} ${userName}`);
         }
     });
 }, 50); // ms

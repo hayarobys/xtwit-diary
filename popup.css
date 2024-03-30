@@ -1,6 +1,6 @@
 body {
-    width: 310px;
-    height: 100px;
+    width: 500px;
+    height: 90px;
     background-color: #15202B;
     color: #E9EBEC;
 }
@@ -48,32 +48,33 @@ thead td {
 
 td {
   border: 1px solid #38444D;
-  min-width: 144px;
+  min-width: 240px;
 }
 
 .info {
-  width: 300px;
+  width: 500px;
 }
 
 .saveCountDiv {
   width: 100px;
 }
 
-.pastSaveDateDiv {
+/* .pastSaveDateDiv {
   width:140px;
   float: left;
   text-align: left;
 }
+*/
 .middleArrow {
-  width:20px;
-  float: left;
+  width:50px;
   text-align: center;
 }
-.saveDateDiv {
+/*
+.currentSaveDateDiv {
   width:140px;
   float: right;
   text-align: right;
-}
+} */
 
 #twitterHandleInput {
   background-color: #253341; /* 입력 필드 배경색 */

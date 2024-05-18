@@ -3,7 +3,7 @@
  */
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     var currentTab = tabs[0];
-    if (currentTab && !currentTab.url.includes("twitter.com")) {
+    if (currentTab && !currentTab.url.includes("twitter.com") && !currentTab.url.includes("x.com")) {
         alert("이 확장 프로그램은 𝕏(구 Twitter)에서만 사용할 수 있습니다.");
         // 기능 비활성화 또는 숨기기
     }else{

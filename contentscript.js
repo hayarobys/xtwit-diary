@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             if(!data.twitterHandle){
                 tabName = '';
             }else{
-                if(request.url.includes('twitter.com/' + data.twitterHandle)){
+                if(request.url.includes('twitter.com/' + data.twitterHandle) || request.url.includes('x.com/' + data.twitterHandle)){
                     if (request.url.includes("/verified_followers")) {
                         tabName = '';
                     }else if (request.url.includes("/followers")) {
